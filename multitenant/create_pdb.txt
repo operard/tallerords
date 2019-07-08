@@ -1,0 +1,73 @@
+TELEFONICA MULTITENANT
+-------------------------
+
+(DESCRIPTION=(CONNECT_TIMEOUT=5)(TRANSPORT_CONNECT_TIMEOUT=3)(RETRY_COUNT=3)(ADDRESS_LIST=(LOAD_BALANCE=on)(ADDRESS=(PROTOCOL=TCP)(HOST=10.0.0.4)(PORT=1521)))(CONNECT_DATA=(SERVICE_NAME=tefdb_fra13c.sub07030810200.vcn01.oraclevcn.com)))
+
+export ORACLE_SID=tefdb
+
+#connect to CDB
+sqlplus sys/'Welcome1#Welcome1#' as sysdba
+
+sqlplus sys/'Welcome1#Welcome1#'@10.0.0.4:1521/tefdb_fra13c.sub07030810200.vcn01.oraclevcn.com as sysdba
+
+show con_name
+
+CON_NAME
+------------------------------
+CDB$ROOT
+
+
+show con_id
+
+CON_ID
+------------------------------
+1
+
+# Display the list of available services for the root and the PDBs.
+
+select name, con_id from v$active_services order by 1;
+
+
+NAME                                                                 CON_ID
+---------------------------------------------------------------- ----------
+SYS$BACKGROUND                                                            1
+SYS$USERS                                                                 1
+pdb01.sub07030810200.vcn01.oraclevcn.com                                  3
+tefdbXDB                                                                  1
+tefdb_fra13c.sub07030810200.vcn01.oraclevcn.com                           1
+
+# Creating the OS Directory for the New Data Files and Temp Files of the PDB
+
+[oracle@tefdbhost sales_history]$ echo $ORACLE_HOME
+/u01/app/oracle/product/12.2.0.1/dbhome_1
+
+sqlplus sys/'Welcome1#Welcome1#'@10.0.0.4:1521/tefdb_fra13c.sub07030810200.vcn01.oraclevcn.com as sysdba
+
+CREATE PLUGGABLE DATABASE salespdb 
+  ADMIN USER salesadm IDENTIFIED BY oracle
+    ROLES=(DBA);
+
+
+SQL> select name, con_id from v$active_services order by 1;
+
+NAME                                                                 CON_ID
+---------------------------------------------------------------- ----------
+SYS$BACKGROUND                                                            1
+SYS$USERS                                                                 1
+pdb01.sub07030810200.vcn01.oraclevcn.com                                  3
+salespdb.sub07030810200.vcn01.oraclevcn.com                               4
+tefdbXDB                                                                  1
+tefdb_fra13c.sub07030810200.vcn01.oraclevcn.com                           1
+
+6 rows selected.
+
+	
+CREATE PLUGGABLE DATABASE salespdb 
+  ADMIN USER salesadm IDENTIFIED BY password
+  STORAGE (MAXSIZE 2G)
+  DEFAULT TABLESPACE sales 
+    DATAFILE '/disk1/oracle/dbs/salespdb/sales01.dbf' SIZE 250M AUTOEXTEND ON
+  PATH_PREFIX = '/disk1/oracle/dbs/salespdb/'
+  FILE_NAME_CONVERT = ('/disk1/oracle/dbs/pdbseed/', '/disk1/oracle/dbs/salespdb/');	
+
+
