@@ -1,0 +1,164 @@
+export ORACLE_SID=orcl
+
+bash-4.2$ ls orcle/
+control01.ctl  orclpdb	 pdbseed     redo02.log  sysaux01.dbf  temp01.dbf     users01.dbf
+control02.ctl  orclpdb2  redo01.log  redo03.log  system01.dbf  undotbs01.dbf
+bash-4.2$ mkdir /u01/oradata/orcle/orclpdbcl
+bash-4.2$ sqlplus sys/Welcome_1 as sysdba
+
+SQL*Plus: Release 12.2.0.1.0 Production on Fri Jul 5 07:55:37 2019
+
+Copyright (c) 1982, 2016, Oracle.  All rights reserved.
+
+Last Successful login time: Fri Jul 05 2019 07:54:28 +00:00
+
+Connected to:
+Oracle Database 12c Enterprise Edition Release 12.2.0.1.0 - 64bit Production
+
+SQL> show pdbs
+
+    CON_ID CON_NAME			  OPEN MODE  RESTRICTED
+---------- ------------------------------ ---------- ----------
+	 2 PDB$SEED			  READ ONLY  NO
+	 3 ORCLPDB			  READ WRITE NO
+	 4 ORCLPDB2			  READ WRITE NO
+SQL> alter pluggable database ORCLPDB close immediate;
+
+Pluggable database altered.
+
+SQL> alter pluggable database ORCLPDB open read only;
+
+Pluggable database altered.
+
+SQL> create pluggable database orclpdbcl from orclpdb
+  2  FILE_NAME_CONVERT=(
+  3  '/u01/oradata/orcle/orclpdb/',
+  4  '/u01/oradata/orcle/orclpdbcl/');
+
+Pluggable database created.
+
+SQL> show pdbs
+
+    CON_ID CON_NAME			  OPEN MODE  RESTRICTED
+---------- ------------------------------ ---------- ----------
+	 2 PDB$SEED			  READ ONLY  NO
+	 3 ORCLPDB			  READ ONLY  NO
+	 4 ORCLPDB2			  READ WRITE NO
+	 6 ORCLPDBCL			  MOUNTED
+SQL> alter pluggable database ORCLPDB close immediate;
+
+Pluggable database altered.
+
+SQL> alter pluggable database ORCLPDB open;
+
+Pluggable database altered.
+
+SQL> alter pluggable database ORCLPDBCL open;
+
+Pluggable database altered.
+
+SQL> alter session set container=ORCLPDBCL;
+
+Session altered.
+
+SQL> select tablespace_name, file_name from dba_data_files;
+
+TABLESPACE_NAME
+------------------------------
+FILE_NAME
+--------------------------------------------------------------------------------
+SYSTEM
+/u01/oradata/orcle/orclpdbcl/system01.dbf
+
+SYSAUX
+/u01/oradata/orcle/orclpdbcl/sysaux01.dbf
+
+UNDOTBS1
+/u01/oradata/orcle/orclpdbcl/undotbs01.dbf
+
+
+TABLESPACE_NAME
+------------------------------
+FILE_NAME
+--------------------------------------------------------------------------------
+USERS
+/u01/oradata/orcle/orclpdbcl/users01.dbf
+
+DEV_STB
+/u01/oradata/orcle/orclpdbcl/DEV_svctbl.dbf
+
+DEV_WLS
+/u01/oradata/orcle/orclpdbcl/DEV_wlsservices.dbf
+
+
+TABLESPACE_NAME
+------------------------------
+FILE_NAME
+--------------------------------------------------------------------------------
+DEV_MDS
+/u01/oradata/orcle/orclpdbcl/DEV_mds.dbf
+
+DEV_IAS_OPSS
+/u01/oradata/orcle/orclpdbcl/DEV_ias_opss.dbf
+
+DEV_IAU
+/u01/oradata/orcle/orclpdbcl/DEV_iau.dbf
+
+
+TABLESPACE_NAME
+------------------------------
+FILE_NAME
+--------------------------------------------------------------------------------
+DEV_ODI_USER
+/u01/oradata/orcle/orclpdbcl/DEV_odi_user.dbf
+
+
+10 rows selected.
+
+SQL> quit;
+Disconnected from Oracle Database 12c Enterprise Edition Release 12.2.0.1.0 - 64bit Production
+bash-4.2$ 
+bash-4.2$ 
+bash-4.2$ 
+bash-4.2$ lsnrctl status
+
+LSNRCTL for Linux: Version 12.2.0.1.0 - Production on 05-JUL-2019 08:03:39
+
+Copyright (c) 1991, 2016, Oracle.  All rights reserved.
+
+Connecting to (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=d5e51f5ce924)(PORT=1521)))
+STATUS of the LISTENER
+------------------------
+Alias                     LISTENER
+Version                   TNSLSNR for Linux: Version 12.2.0.1.0 - Production
+Start Date                05-JUL-2019 06:55:44
+Uptime                    0 days 1 hr. 7 min. 56 sec
+Trace Level               off
+Security                  ON: Local OS Authentication
+SNMP                      OFF
+Listener Parameter File   /u01/ssi_db/db_home/network/admin/listener.ora
+Listener Log File         /u01/diag/tnslsnr/d5e51f5ce924/listener/alert/log.xml
+Listening Endpoints Summary...
+  (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=d5e51f5ce924)(PORT=1521)))
+  (DESCRIPTION=(ADDRESS=(PROTOCOL=ipc)(KEY=EXTPROC1521)))
+  (DESCRIPTION=(ADDRESS=(PROTOCOL=tcps)(HOST=d5e51f5ce924)(PORT=5500))(Security=(my_wallet_directory=/u01/admin/orcle/xdb_wallet))(Presentation=HTTP)(Session=RAW))
+Services Summary...
+Service "637f8862cdb0d7e3e0534216c40a8ce0.us.oracle.com" has 1 instance(s).
+  Instance "orcle", status READY, has 1 handler(s) for this service...
+Service "8ceb1fe4ea11034fe053020012ac375e.us.oracle.com" has 1 instance(s).
+  Instance "orcle", status READY, has 1 handler(s) for this service...
+Service "8ceb762abb4f0482e053020012acd0ea.us.oracle.com" has 1 instance(s).
+  Instance "orcle", status READY, has 1 handler(s) for this service...
+Service "orcle.us.oracle.com" has 1 instance(s).
+  Instance "orcle", status READY, has 1 handler(s) for this service...
+Service "orcleXDB.us.oracle.com" has 1 instance(s).
+  Instance "orcle", status READY, has 1 handler(s) for this service...
+Service "orclpdb.us.oracle.com" has 1 instance(s).
+  Instance "orcle", status READY, has 1 handler(s) for this service...
+Service "orclpdb2.us.oracle.com" has 1 instance(s).
+  Instance "orcle", status READY, has 1 handler(s) for this service...
+Service "orclpdbcl.us.oracle.com" has 1 instance(s).
+  Instance "orcle", status READY, has 1 handler(s) for this service...
+The command completed successfully
+bash-4.2$  
+
