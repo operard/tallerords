@@ -1,0 +1,272 @@
+{
+	"info": {
+		"_postman_id": "0db58888-7160-4fd2-8083-8a0af2d28322",
+		"name": "ORDS",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get OAuth token",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "2LWoNfwxAq2eqXBtdLwcuA..",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "5tv0sgcTwy0_7sFpDsYFXA..",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "grant_type=client_credentials"
+				},
+				"url": {
+					"raw": "http://10.0.0.3:8080/ords/ords01/oauth/token",
+					"protocol": "http",
+					"host": [
+						"10",
+						"0",
+						"0",
+						"3"
+					],
+					"port": "8080",
+					"path": [
+						"ords",
+						"ords01",
+						"oauth",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get data from table using token",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "pnjt7RdrRY9UmTrRa8XaWQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://10.0.0.3:8080/ords/ords01/mytable/",
+					"protocol": "http",
+					"host": [
+						"10",
+						"0",
+						"0",
+						"3"
+					],
+					"port": "8080",
+					"path": [
+						"ords",
+						"ords01",
+						"mytable",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get data from table using token 2",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "pnjt7RdrRY9UmTrRa8XaWQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"url": {
+					"raw": "http://10.0.0.3:8080/ords/ords01/mod1/mytablecount/",
+					"protocol": "http",
+					"host": [
+						"10",
+						"0",
+						"0",
+						"3"
+					],
+					"port": "8080",
+					"path": [
+						"ords",
+						"ords01",
+						"mod1",
+						"mytablecount",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Insert data to table using token",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "pnjt7RdrRY9UmTrRa8XaWQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \"id\": 4, \"text\": \"texto desde Postman\" }"
+				},
+				"url": {
+					"raw": "http://10.0.0.3:8080/ords/ords01/mytable/",
+					"protocol": "http",
+					"host": [
+						"10",
+						"0",
+						"0",
+						"3"
+					],
+					"port": "8080",
+					"path": [
+						"ords",
+						"ords01",
+						"mytable",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update data to table using token",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "pnjt7RdrRY9UmTrRa8XaWQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \"id\": 3, \"text\": \"texto desde Postman\" }"
+				},
+				"url": {
+					"raw": "http://10.0.0.3:8080/ords/ords01/mytable/3",
+					"protocol": "http",
+					"host": [
+						"10",
+						"0",
+						"0",
+						"3"
+					],
+					"port": "8080",
+					"path": [
+						"ords",
+						"ords01",
+						"mytable",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete data to table using token",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "pnjt7RdrRY9UmTrRa8XaWQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://10.0.0.3:8080/ords/ords01/mytable/3",
+					"protocol": "http",
+					"host": [
+						"10",
+						"0",
+						"0",
+						"3"
+					],
+					"port": "8080",
+					"path": [
+						"ords",
+						"ords01",
+						"mytable",
+						"3"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
